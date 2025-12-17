@@ -1,7 +1,7 @@
 import { firestore } from '../firebase/firebase';
 import admin from 'firebase-admin';
 
-export const saveIncomingMessage = async (ctx) => {
+export const saveIncomingMessage = async (ctx:any) => {
   if (!ctx?.from) return;
 
   await firestore.collection('messages').add({
