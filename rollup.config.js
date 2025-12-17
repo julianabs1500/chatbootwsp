@@ -1,13 +1,20 @@
-import typescript from 'rollup-plugin-typescript2'
+import typescript from '@rollup/plugin-typescript'
 
 export default {
-    input: 'src/app.ts',
-    output: {
-        file: 'dist/app.js',
-        format: 'esm',
-    },
-    onwarn: (warning) => {
-        if (warning.code === 'UNRESOLVED_IMPORT') return
-    },
-    plugins: [typescript()],
+  input: 'src/app.ts',
+  output: {
+    file: 'dist/app.js',
+    format: 'esm',
+    sourcemap: false,
+  },
+  plugins: [
+    typescript({
+      tsconfig: './tsconfig.json',
+    }),
+  ],
+  external: [
+    '@builderbot/bot',
+    '@builderbot/provider-meta',
+    'firebase-admin',
+  ],
 }
