@@ -1,30 +1,12 @@
 import * as dotenv from 'dotenv';
 
-import ffmpeg from 'fluent-ffmpeg';
-import ffmpegInstaller from '@ffmpeg-installer/ffmpeg'; // <-- Usamos el instalador de npm
+
 import { join } from 'path';
 import { createBot, createProvider, createFlow, addKeyword, utils, EVENTS } from '@builderbot/bot';
 import { MemoryDB as Database } from '@builderbot/bot';
 import { MetaProvider as Provider } from '@builderbot/provider-meta';
 
-dotenv.config();
 
-// Configurar ruta de ffmpeg usando @ffmpeg-installer
-ffmpeg.setFfmpegPath(ffmpegInstaller.path);
-
-// Ejemplo de flujo que use ffmpeg
-async function convertVideo(inputPath: string, outputPath: string) {
-  return new Promise<void>((resolve, reject) => {
-    ffmpeg(inputPath)
-      .output(outputPath)
-      .on('end', () => resolve())
-      .on('error', (err) => reject(err))
-      .run();
-  });
-}
-
-// Aquí van tus flujos de bot (welcomeFlow, identityFlow, etc.)
-// ...
 
 dotenv.config();
 
