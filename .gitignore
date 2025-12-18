@@ -11,3 +11,4 @@ node_modules
 
 # Firebase
 src/firebase/firebase-key.json
+.env

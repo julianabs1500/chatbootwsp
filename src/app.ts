@@ -9,6 +9,10 @@ import {
 import { MemoryDB as Database } from '@builderbot/bot'
 import { MetaProvider as Provider } from '@builderbot/provider-meta'
 import admin from 'firebase-admin'
+import ffmpeg from "fluent-ffmpeg";
+
+ffmpeg.setFfmpegPath("ffmpeg");
+
 
 dotenv.config()
 
@@ -149,25 +153,20 @@ Responde con el número:
   )
 
   // ⚠️ NO null → string vacío + undefined
-  .addAnswer(
-    '',
-    undefined,
-    async (
-      ctx: any,
-      { provider }: any
-    ) => {
-      await saveIncomingMessage(ctx)
+.addAnswer(
+  '🔐 Para continuar, inicia sesión tocando el botón:',
+  undefined,
+  async (ctx: any, { provider }: any) => {
+    await provider.sendButtonUrl(
+      ctx.from,
+      {
+        body: 'Iniciar sesión',
+        url: 'https://google.com',
+      }
+    )
+  }
+)
 
-      await provider.sendButtonUrl(
-        ctx.from,
-        {
-          body: 'Iniciar sesión',
-          url: 'https://google.com',
-        },
-        '🔐 Para continuar, inicia sesión y regresa a WhatsApp'
-      )
-    }
-  )
 
 /* ─────────────────────────────────────────────
    🚀 MAIN
