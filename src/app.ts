@@ -4,8 +4,17 @@ import { createBot, createProvider, createFlow, addKeyword, utils, EVENTS } from
 import { MemoryDB as Database } from '@builderbot/bot'
 import { MetaProvider as Provider } from '@builderbot/provider-meta'
 import ffmpeg from 'fluent-ffmpeg';
+import { existsSync } from 'fs';
 
-ffmpeg.setFfmpegPath('/usr/bin/ffmpeg');
+// Ruta del sistema
+const systemFfmpeg = '/usr/bin/ffmpeg';
+
+if (existsSync(systemFfmpeg)) {
+  ffmpeg.setFfmpegPath(systemFfmpeg);
+} else {
+  console.warn('No se encontró ffmpeg en /usr/bin, fluent-ffmpeg intentará usar @ffmpeg-installer/ffmpeg');
+}
+
 
 
 dotenv.config()
