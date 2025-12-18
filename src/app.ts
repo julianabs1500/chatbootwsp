@@ -5,7 +5,7 @@ import { MemoryDB as Database } from '@builderbot/bot'
 import { MetaProvider as Provider } from '@builderbot/provider-meta'
 import ffmpeg from 'fluent-ffmpeg';
 
-ffmpeg.setFfmpegPath(process.env.FFMPEG_PATH || '/usr/bin/ffmpeg');
+ffmpeg.setFfmpegPath('/usr/bin/ffmpeg');
 
 
 dotenv.config()
