@@ -24,7 +24,7 @@ FROM node:20-bullseye
 
 WORKDIR /app
 
-# Instalar ffmpeg completo y librerías necesarias
+# Instalar ffmpeg nativo y librerías necesarias
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     libx264-dev \
@@ -42,7 +42,7 @@ COPY --from=builder /app/dist ./dist
 # Variable de entorno para fluent-ffmpeg
 ENV FFMPEG_PATH=/usr/bin/ffmpeg
 
-# Exponer puerto (ajusta según tu app)
+# Exponer puerto
 EXPOSE 3008
 
 # Comando de arranque

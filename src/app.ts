@@ -1,37 +1,32 @@
 import * as dotenv from 'dotenv'
-import { join } from 'path'
-import { createBot, createProvider, createFlow, addKeyword, utils, EVENTS } from '@builderbot/bot'
-import { MemoryDB as Database } from '@builderbot/bot'
-import { MetaProvider as Provider } from '@builderbot/provider-meta'
 
 
 
+import ffmpeg from 'fluent-ffmpeg';
+import { join } from 'path';
+import { createBot, createProvider, createFlow, addKeyword, utils, EVENTS } from '@builderbot/bot';
+import { MemoryDB as Database } from '@builderbot/bot';
+import { MetaProvider as Provider } from '@builderbot/provider-meta';
 
-import { FFmpeg } from '@ffmpeg/ffmpeg';
-import { fetchFile } from '@ffmpeg/util';
+dotenv.config();
 
-async function transcodeLocalVideo() {
-  // Crear instancia
-  const ffmpeg = new FFmpeg();
 
-  // Cargar el core WASM (descarga interna automática)
-  await ffmpeg.load();
+// Configurar ruta de ffmpeg nativo
+ffmpeg.setFfmpegPath('/usr/bin/ffmpeg');
 
-  // Cargar archivo en memoria
-  const data = await fetchFile('video.mp4'); // puede ser URL o local
-  await ffmpeg.writeFile('input.mp4', data);
-
-  // Ejecutar comando
-  await ffmpeg.exec(['-i', 'input.mp4', 'output.gif']);
-
-  // Leer resultado
-  const result = await ffmpeg.readFile('output.gif');
-
-  // `result` es un Uint8Array listo para usar
-  console.log('Output size:', result.length);
+// Ejemplo de flujo que use ffmpeg
+async function convertVideo(inputPath: string, outputPath: string) {
+  return new Promise<void>((resolve, reject) => {
+    ffmpeg(inputPath)
+      .output(outputPath)
+      .on('end', () => resolve())
+      .on('error', (err) => reject(err))
+      .run();
+  });
 }
 
-transcodeLocalVideo();
+// Aquí van tus flujos de bot (welcomeFlow, identityFlow, etc.)
+// ...
 
 
 
