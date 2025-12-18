@@ -1,31 +1,46 @@
-# Usar Node 20 slim como base
-FROM node:20-slim
+# ==========================
+# Stage 1: Build
+# ==========================
+FROM node:20-slim AS builder
 
-# Instalar ffmpeg y dependencias necesarias
-RUN apt-get update && apt-get install -y \
-    ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
-
-# Establecer directorio de trabajo
+# Directorio de trabajo
 WORKDIR /app
 
 # Copiar package.json y package-lock.json
 COPY package*.json ./
 
-# Instalar dependencias
-RUN npm install --production
+# Instalar todas las dependencias (incluyendo devDependencies para build)
+RUN npm install
 
-# Copiar el resto del código fuente
+# Copiar todo el código fuente
 COPY . .
 
-# Compilar TypeScript
+# Compilar TypeScript y bundle con Rollup
 RUN npm run build
 
-# Asegurarse de que fluent-ffmpeg use el binario del sistema
+# ==========================
+# Stage 2: Production
+# ==========================
+FROM node:20-slim
+
+WORKDIR /app
+
+# Instalar ffmpeg en producción
+RUN apt-get update && apt-get install -y ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar package.json y package-lock.json
+COPY package*.json ./
+
+# Instalar solo dependencias de producción
+RUN npm install --production
+
+# Copiar código compilado desde la etapa de build
+COPY --from=builder /app/dist ./dist
+
+# Configurar variable de entorno para fluent-ffmpeg
 ENV FFMPEG_PATH=/usr/bin/ffmpeg
 
-# Exponer el puerto (opcional, según tu app)
-EXPOSE 3000
 
-# Comando de arranque
+# Comando para iniciar la app
 CMD ["node", "dist/app.js"]
