@@ -3,17 +3,36 @@ import { join } from 'path'
 import { createBot, createProvider, createFlow, addKeyword, utils, EVENTS } from '@builderbot/bot'
 import { MemoryDB as Database } from '@builderbot/bot'
 import { MetaProvider as Provider } from '@builderbot/provider-meta'
-import ffmpeg from 'fluent-ffmpeg';
-import { existsSync } from 'fs';
 
-// Ruta del sistema
-const systemFfmpeg = '/usr/bin/ffmpeg';
 
-if (existsSync(systemFfmpeg)) {
-  ffmpeg.setFfmpegPath(systemFfmpeg);
-} else {
-  console.warn('No se encontró ffmpeg en /usr/bin, fluent-ffmpeg intentará usar @ffmpeg-installer/ffmpeg');
+
+
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { fetchFile } from '@ffmpeg/util';
+
+async function transcodeLocalVideo() {
+  // Crear instancia
+  const ffmpeg = new FFmpeg();
+
+  // Cargar el core WASM (descarga interna automática)
+  await ffmpeg.load();
+
+  // Cargar archivo en memoria
+  const data = await fetchFile('video.mp4'); // puede ser URL o local
+  await ffmpeg.writeFile('input.mp4', data);
+
+  // Ejecutar comando
+  await ffmpeg.exec(['-i', 'input.mp4', 'output.gif']);
+
+  // Leer resultado
+  const result = await ffmpeg.readFile('output.gif');
+
+  // `result` es un Uint8Array listo para usar
+  console.log('Output size:', result.length);
 }
+
+transcodeLocalVideo();
+
 
 
 
